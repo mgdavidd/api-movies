@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probar API Rest</title>
+  <!--pongo los estilos de la pagina-->
+  <style>
+    article {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      height: auto;
+      width: 320px;
+      max-width: 100%;
+    }
+  </style>
+  <script type="module">
+    //usamos javascript para usar nuestra api atravez del navegardor por medio de un fetch
+    fetch('http://localhost:3000/movies')
+      .then(res => res.json())
+      .then(movies => {
+        const html = movies.map(movie => {
+          return `
+            <article data-id="${movie.id}">
+              <h2>${movie.title}</h2>
+              <img src="${movie.poster}" alt="${movie.title}">
+              <p>${movie.year}</p>
+
+              <button>Eliminar</button>
+            </article>
+          `
+        }).join('')
+
+        //que el elemento main tenga como html el texto html que se hizo previamente
+        document.querySelector('main').innerHTML = html
+
+        document.addEventListener('click', e => {
+          //e.target representa el elemento en el que se hizo clic.
+          //si se hizo click a un boton
+          if (e.target.matches('button')) {
+            //buscamos el articulo mas sercano despues de haber hecho click en el boton
+            const article = e.target.closest('article')
+            //y buscamos su data-id
+            const id = article.dataset.id
+
+            //hacemos un delete con la siguiente url
+            fetch(`http://localhost:3000/movies/${id}`, {
+              method: 'DELETE'
+            })
+            //al obtener la respuesta verificamos si existe res.ok
+              .then(res => {
+                if (res.ok) {
+                  //y quitamos ese articulo
+                  article.remove()
+                }
+              })
+            }
+          
+        })
+      })
+  </script>
+</head>
+<body>
+  <main></main>
+</body>
+</html>
