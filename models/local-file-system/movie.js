@@ -1,7 +1,7 @@
 //Representa la lógica de negocio y los datos de la aplicación.
 //Es responsable de acceder a la base de datos, realizar cálculos y gestionar el estado de la aplicación.
 //El modelo no tiene conocimiento de la interfaz de usuario.
-import { readJSON } from "../utils.js";
+import { readJSON } from "../../utils.js";
 import {randomUUID} from "node:crypto"
 
 const movies = readJSON('./movies.json')
